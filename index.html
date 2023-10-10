@@ -1,0 +1,50 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Video file handling in NodeJS</title>
+    </head>
+    <body>
+        <form>
+            <input type="file" name="files" required multiple />
+            <button type="submit" id="upload" >upload file</button>
+
+        </form>
+        <!-- <button id="download" data-fileid="avatar">download file</button> -->
+        <button id="download" data-fileid="avatar">Download and Upload file</button>
+
+    </body>
+    <script>
+        const formElem = document.querySelector('form');
+        formElem.addEventListener('submit', async(e)=>{
+            console.log("form submitted");
+            e.preventDefault();
+            await fetch('/upload', {
+                method: 'POST',
+                body: new FormData(formElem)
+            })
+        })
+        const downloadButton = document.getElementById('download');
+        downloadButton.addEventListener('click', async () => {
+        const fileId = downloadButton.getAttribute('data-fileid');
+        window.location.href = `/download/${fileId}`;
+            
+    });
+
+    const downloadButton2 = document.getElementById('download');
+        downloadButton.addEventListener('click', async () => {
+            const fileId = downloadButton.getAttribute('data-fileid');
+            const response = await fetch(`/download/${fileId}/upload`, {
+                method: 'POST'
+            });
+
+            if (response.ok) {
+                console.log('Download and Upload initiated successfully.');
+            } else {
+                console.error('Error initiating Download and Upload process.');
+            }
+        });
+        
+    </script>
+    </html>
